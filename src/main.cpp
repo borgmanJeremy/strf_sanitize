@@ -27,18 +27,17 @@ std::vector<char> create_specifier_list()
     return allowed_specifier;
 }
 
-std::string replace_all(std::string const& input,
+std::string replace_all(std::string input,
                         std::string const& to_find,
                         std::string const& to_replace)
 {
     size_t pos = 0;
-    std::string output = input;
     while ((pos = input.find(to_find, pos)) != std::string::npos) {
-        output.replace(pos, to_find.length(), to_replace);
+        input.replace(pos, to_find.length(), to_replace);
         pos += to_replace.length();
     }
 
-    return output;
+    return input;
 }
 
 std::vector<char> match_specifiers(std::string const& specifier,
@@ -66,13 +65,11 @@ std::vector<char> match_specifiers(std::string const& specifier,
     return overlap;
 }
 
-int main()
+std::string format_time_string(std::string const& specifier)
 {
+
     std::time_t t = std::time(nullptr);
     char buff[100];
-
-    std::string specifier = "ss_%Y_%j_%H";
-    std::cout << "Starting Specifier: " << specifier << std::endl;
 
     auto allowed_specifier = create_specifier_list();
 
@@ -86,7 +83,7 @@ int main()
         lookup_string.push_back('*');
     }
 
-    auto size = std::strftime(
+    std::strftime(
       buff, sizeof(buff), lookup_string.c_str(), std::localtime(&t));
 
     std::map<char, std::string> lookup_table;
@@ -98,9 +95,20 @@ int main()
 
     // Sub into original string
     std::string delim = "%";
+    auto output_string = specifier;
     for (auto const& row : lookup_table) {
         auto to_find = delim + row.first;
-        specifier = replace_all(specifier, to_find, row.second);
+        output_string = replace_all(output_string, to_find, row.second);
     }
-    std::cout << specifier;
+    return output_string;
+}
+
+int main()
+{
+    std::string specifier = "ss_%Y_%j_%H";
+    std::cout << "Starting Specifier: " << specifier << std::endl;
+
+    auto result = format_time_string(specifier);
+
+    std::cout << result;
 }
