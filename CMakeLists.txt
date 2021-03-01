@@ -39,16 +39,16 @@ option(BUILD_SHARED_LIBS "Enable compilation of shared libraries" OFF)
 option(ENABLE_TESTING "Enable Test Builds" ON)
 option(ENABLE_FUZZING "Enable Fuzzing Builds" OFF)
 
-#if(ENABLE_TESTING)
-#  enable_testing()
-#  message("Building Tests. Be sure to check out test/constexpr_tests for constexpr testing")
-#  add_subdirectory(test)
-#endif()
-#
-#if(ENABLE_FUZZING)
-#  message("Building Fuzz Tests, using fuzzing sanitizer https://www.llvm.org/docs/LibFuzzer.html")
-#  add_subdirectory(fuzz_test)
-#endif()
+if(ENABLE_TESTING)
+  enable_testing()
+  message("Building Tests")
+  add_subdirectory(test)
+endif()
+
+if(ENABLE_FUZZING)
+  message("Building Fuzz Tests, using fuzzing sanitizer https://www.llvm.org/docs/LibFuzzer.html")
+  add_subdirectory(fuzz_test)
+endif()
 
 add_subdirectory(src)
 
