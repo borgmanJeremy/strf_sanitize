@@ -3,9 +3,10 @@
 
 int main()
 {
+    std::string specifier;
 
-    std::string specifier = "";
-    std::cout << "Starting Specifier: " << specifier << std::endl;
+    std::cout << "Enter String to Test.\nFor Example, %H_%M_%S\n:";
+    std::cin >> specifier;
     auto result = format_time_string(specifier);
 
     std::cout << result;
